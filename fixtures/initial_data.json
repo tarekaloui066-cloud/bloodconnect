@@ -1,0 +1,216 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "username": "donneur1",
+            "email": "donneur1@test.com",
+            "password": "pbkdf2_sha256$600000$jyZZQBa4btLCFDn7$LZLwkj+iPLg5YqSPuRLGxtJLoNRCw6Z/eZ7L1LeMMUM=",
+            "first_name": "Ahmed",
+            "last_name": "Ben Ali",
+            "is_active": true
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "username": "donneur2",
+            "email": "donneur2@test.com",
+            "password": "pbkdf2_sha256$600000$9HSq+S+0A3qFHaNx$/tlPAxWuP34pJ0nGuZIZB1iEkOXs+GR42SPNC1g5Re4=",
+            "first_name": "Fatima",
+            "last_name": "Trabelsi",
+            "is_active": true
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 3,
+        "fields": {
+            "username": "donneur3",
+            "email": "donneur3@test.com",
+            "password": "pbkdf2_sha256$600000$LdlViy8HMjepRUqz$GJXWYGwfeJiVRRCfofI2znI/iJ9odXoKb8T0uKTilCs=",
+            "first_name": "Mohamed",
+            "last_name": "Khalil",
+            "is_active": true
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 4,
+        "fields": {
+            "username": "donneur4",
+            "email": "donneur4@test.com",
+            "password": "pbkdf2_sha256$600000$63YcLxT3nBzeBSDa$2NFnFfWfHELauW0yFLmrNt8cCVe+nbAit7ZGARV9fuU=",
+            "first_name": "Layla",
+            "last_name": "Mansour",
+            "is_active": true
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 5,
+        "fields": {
+            "username": "donneur5",
+            "email": "donneur5@test.com",
+            "password": "pbkdf2_sha256$600000$HMy/VFxCJc3c+pRL$Dim2agnM7Jd0aZEu2GuQIAyrdv9A4CnWWiDhvLbYnzE=",
+            "first_name": "Hassan",
+            "last_name": "Guesmi",
+            "is_active": true
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 10,
+        "fields": {
+            "username": "hopital1",
+            "email": "hopital1@test.com",
+            "password": "pbkdf2_sha256$600000$e+b0z7p2ydjjpLqV$rfYsSJsmCFymSFLJo4PtnafrYDk2dKb/Sgb5mDzNVqw=",
+            "first_name": "CHU",
+            "last_name": "Tunis",
+            "is_active": true
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 11,
+        "fields": {
+            "username": "hopital2",
+            "email": "hopital2@test.com",
+            "password": "pbkdf2_sha256$600000$KmuAjfp+iUg8BxhE$bu5I2nN/tLhSljLg1i2wsIsCPB/iH+A02ju3cxjwdTw=",
+            "first_name": "Hôpital",
+            "last_name": "Sfax",
+            "is_active": true
+        }
+    },
+    {
+        "model": "accounts.donneur",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "groupe_sanguin": "O+",
+            "sexe": "M",
+            "date_naissance": "1990-05-15",
+            "ville": "Tunis",
+            "actif": true,
+            "telephone": "+21698765432"
+        }
+    },
+    {
+        "model": "accounts.donneur",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "groupe_sanguin": "A+",
+            "sexe": "F",
+            "date_naissance": "1995-08-20",
+            "ville": "Sfax",
+            "actif": true,
+            "telephone": "+21699876543"
+        }
+    },
+    {
+        "model": "accounts.donneur",
+        "pk": 3,
+        "fields": {
+            "user": 3,
+            "groupe_sanguin": "B+",
+            "sexe": "M",
+            "date_naissance": "1988-03-10",
+            "ville": "Sousse",
+            "actif": true,
+            "telephone": "+21697654321"
+        }
+    },
+    {
+        "model": "accounts.donneur",
+        "pk": 4,
+        "fields": {
+            "user": 4,
+            "groupe_sanguin": "AB-",
+            "sexe": "F",
+            "date_naissance": "1992-12-25",
+            "ville": "Tunis",
+            "actif": true,
+            "telephone": "+21696543210"
+        }
+    },
+    {
+        "model": "accounts.donneur",
+        "pk": 5,
+        "fields": {
+            "user": 5,
+            "groupe_sanguin": "O-",
+            "sexe": "M",
+            "date_naissance": "1985-07-30",
+            "ville": "Gafsa",
+            "actif": true,
+            "telephone": "+21695432109"
+        }
+    },
+    {
+        "model": "accounts.hopital",
+        "pk": 1,
+        "fields": {
+            "user": 10,
+            "nom": "CHU Tunis la Rabta",
+            "adresse": "Rue el Menzel, Tunis",
+            "ville": "Tunis",
+            "telephone": "+21671234567",
+            "est_valide": true,
+            "date_inscription": "2026-05-01T10:00:00Z"
+        }
+    },
+    {
+        "model": "accounts.hopital",
+        "pk": 2,
+        "fields": {
+            "user": 11,
+            "nom": "Hôpital Hedi Chaker Sfax",
+            "adresse": "Avenue Bourguiba, Sfax",
+            "ville": "Sfax",
+            "telephone": "+21674567890",
+            "est_valide": true,
+            "date_inscription": "2026-05-02T10:00:00Z"
+        }
+    },
+    {
+        "model": "hopital.demandeurgente",
+        "pk": 1,
+        "fields": {
+            "hopital": 1,
+            "groupe_sanguin": "O+",
+            "quantite": 10,
+            "delai": "2026-05-12",
+            "statut": "active",
+            "description": "Urgence chirurgicale",
+            "date_publication": "2026-05-11T08:00:00Z"
+        }
+    },
+    {
+        "model": "hopital.demandeurgente",
+        "pk": 2,
+        "fields": {
+            "hopital": 1,
+            "groupe_sanguin": "A+",
+            "quantite": 5,
+            "delai": "2026-05-13",
+            "statut": "active",
+            "description": "Accident de la circulation",
+            "date_publication": "2026-05-11T09:00:00Z"
+        }
+    },
+    {
+        "model": "hopital.demandeurgente",
+        "pk": 3,
+        "fields": {
+            "hopital": 2,
+            "groupe_sanguin": "B-",
+            "quantite": 3,
+            "delai": "2026-05-14",
+            "statut": "active",
+            "description": "Transfusion programmée",
+            "date_publication": "2026-05-11T10:00:00Z"
+        }
+    }
+]

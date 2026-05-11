@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-header bg-primary text-white text-center py-3 rounded-top-4">
+                <h3 class="mb-0 fw-bold">✏️ Modifier la Demande Urgente</h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <!-- Sélection du Groupe Sanguin -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark">Groupe Sanguin Requis</label>
+                        <select name="groupe_sanguin" class="form-select form-select-lg border-primary" required>
+                            <option value="">Choisir le groupe...</option>
+                            <option value="A+" {% if demande.groupe_sanguin == 'A+' %}selected{% endif %}>A+</option>
+                            <option value="A-" {% if demande.groupe_sanguin == 'A-' %}selected{% endif %}>A-</option>
+                            <option value="B+" {% if demande.groupe_sanguin == 'B+' %}selected{% endif %}>B+</option>
+                            <option value="B-" {% if demande.groupe_sanguin == 'B-' %}selected{% endif %}>B-</option>
+                            <option value="AB+" {% if demande.groupe_sanguin == 'AB+' %}selected{% endif %}>AB+</option>
+                            <option value="AB-" {% if demande.groupe_sanguin == 'AB-' %}selected{% endif %}>AB-</option>
+                            <option value="O+" {% if demande.groupe_sanguin == 'O+' %}selected{% endif %}>O+</option>
+                            <option value="O-" {% if demande.groupe_sanguin == 'O-' %}selected{% endif %}>O-</option>
+                        </select>
+                    </div>
+
+                    <!-- Quantité de poches -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark">Quantité de poches</label>
+                        <input type="number" name="quantite" class="form-control form-control-lg border-primary" 
+                            value="{{ demande.quantite }}" required min="1">
+                    </div>
+
+                    <!-- Délai -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark">Délai limite</label>
+                        <input type="date" name="delai" class="form-control form-control-lg border-primary" 
+                            value="{{ demande.delai|date:'Y-m-d' }}" required>
+                    </div>
+
+                    <!-- Description de l'urgence -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark">Détails de la demande</label>
+                        <textarea name="description" class="form-control" rows="4" placeholder="Détails...">{{ demande.description }}</textarea>
+                    </div>
+
+                    <!-- Boutons -->
+                    <div class="d-grid gap-2 d-sm-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 fw-bold">
+                            <i class="fas fa-save me-2"></i>Sauvegarder les modifications
+                        </button>
+                        <a href="{% url 'hopital:dashboard' %}" class="btn btn-secondary btn-lg rounded-pill px-5 fw-bold">
+                            Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

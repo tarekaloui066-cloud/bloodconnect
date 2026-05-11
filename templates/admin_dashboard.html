@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="card p-4 mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <h2 class="mb-1"><i class="fas fa-chart-line me-2"></i>Tableau de Bord Administrateur</h2>
+        <p class="mb-0 opacity-75">Statistiques et gestion globale du système</p>
+    </div>
+
+    <!-- Statistiques Principales -->
+    <div class="row g-4 mb-5">
+        <!-- Donneurs -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+                <div class="text-primary fs-1 mb-2">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h5 class="text-muted small">Donneurs Totaux</h5>
+                <h2 class="fw-bold mb-2" style="color: #667eea;">{{ total_donneurs }}</h2>
+                <p class="text-success small mb-0">
+                    <i class="fas fa-check-circle me-1"></i>{{ donneurs_actifs }} actifs
+                </p>
+            </div>
+        </div>
+
+        <!-- Hôpitaux -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+                <div class="text-danger fs-1 mb-2">
+                    <i class="fas fa-hospital"></i>
+                </div>
+                <h5 class="text-muted small">Hôpitaux Totaux</h5>
+                <h2 class="fw-bold mb-2" style="color: var(--blood-red);">{{ total_hopitaux }}</h2>
+                <p class="text-success small mb-0">
+                    <i class="fas fa-check-circle me-1"></i>{{ hopitaux_valides }} validés
+                </p>
+            </div>
+        </div>
+
+        <!-- Dons -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+                <div class="text-info fs-1 mb-2">
+                    <i class="fas fa-tint"></i>
+                </div>
+                <h5 class="text-muted small">Dons Totaux</h5>
+                <h2 class="fw-bold mb-2" style="color: #0dcaf0;">{{ total_dons }}</h2>
+                <p class="text-muted small mb-0">
+                    <i class="fas fa-calendar-alt me-1"></i>Enregistrés
+                </p>
+            </div>
+        </div>
+
+        <!-- Appels Urgents -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+                <div class="text-warning fs-1 mb-2">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <h5 class="text-muted small">Appels Urgents</h5>
+                <h2 class="fw-bold mb-2" style="color: #ffc107;">{{ demandes_actives }}</h2>
+                <p class="text-danger small mb-0">
+                    <i class="fas fa-times me-1"></i>{{ demandes_fermees }} fermés
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Détails et Répartition -->
+    <div class="row g-4 mb-5">
+        <!-- Répartition par groupe sanguin (Demandes) -->
+        <div class="col-lg-6">
+            <div class="card h-100 border-0 shadow-sm p-4">
+                <h5 class="fw-bold mb-4">
+                    <i class="fas fa-chart-bar text-danger me-2"></i>Appels Urgents par Groupe Sanguin
+                </h5>
+                {% if demandes_par_groupe %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <tbody>
+                            {% for item in demandes_par_groupe %}
+                            <tr>
+                                <td>
+                                    <span class="badge bg-danger fs-6">{{ item.groupe_sanguin }}</span>
+                                </td>
+                                <td class="text-end">
+                                    <strong>{{ item.count }} demande(s)</strong>
+                                </td>
+                                <td style="width: 50%;">
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar bg-danger" style="width: {% widthratio item.count demandes_actives 100 %}%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">Aucune demande active.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Répartition par groupe sanguin (Donneurs) -->
+        <div class="col-lg-6">
+            <div class="card h-100 border-0 shadow-sm p-4">
+                <h5 class="fw-bold mb-4">
+                    <i class="fas fa-chart-bar text-primary me-2"></i>Donneurs par Groupe Sanguin
+                </h5>
+                {% if donneurs_par_groupe %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <tbody>
+                            {% for item in donneurs_par_groupe %}
+                            <tr>
+                                <td>
+                                    <span class="badge bg-primary fs-6">{{ item.groupe_sanguin }}</span>
+                                </td>
+                                <td class="text-end">
+                                    <strong>{{ item.count }} donneur(s)</strong>
+                                </td>
+                                <td style="width: 50%;">
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar bg-primary" style="width: {% widthratio item.count total_donneurs 100 %}%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">Aucun donneur enregistré.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Réponses aux appels urgents -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-6">
+            <div class="card h-100 border-0 shadow-sm p-4">
+                <h5 class="fw-bold mb-4">
+                    <i class="fas fa-check-circle text-success me-2"></i>Gestion des Réponses
+                </h5>
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex justify-content-between align-items-center border-0 pb-3">
+                        <span>Total des réponses</span>
+                        <span class="badge bg-secondary rounded-pill">{{ total_reponses }}</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center border-0">
+                        <span>Confirmées</span>
+                        <span class="badge bg-success rounded-pill">{{ reponses_confirmees }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions administrateur -->
+        <div class="col-lg-6">
+            <div class="card h-100 border-0 shadow-sm p-4">
+                <h5 class="fw-bold mb-4">
+                    <i class="fas fa-cog text-secondary me-2"></i>Actions Administrateur
+                </h5>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'export_donneurs_csv' %}" class="btn btn-primary btn-lg rounded-pill fw-bold">
+                        <i class="fas fa-download me-2"></i>Exporter les Donneurs (CSV)
+                    </a>
+                    <a href="/admin/" class="btn btn-secondary btn-lg rounded-pill fw-bold">
+                        <i class="fas fa-cog me-2"></i>Panel Admin Django
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vue d'ensemble -->
+    <div class="card border-0 shadow-sm p-4">
+        <h5 class="fw-bold mb-3">
+            <i class="fas fa-eye text-info me-2"></i>Résumé du Système
+        </h5>
+        <div class="row">
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <strong>Taux d'activation des donneurs:</strong>
+                        <span class="float-end">
+                            {% if total_donneurs > 0 %}
+                                {% widthratio donneurs_actifs total_donneurs 100 %}%
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </li>
+                    <li class="mb-2">
+                        <strong>Hôpitaux validés:</strong>
+                        <span class="float-end">
+                            {% if total_hopitaux > 0 %}
+                                {% widthratio hopitaux_valides total_hopitaux 100 %}%
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <strong>Appels fermés:</strong>
+                        <span class="float-end text-muted">{{ demandes_fermees }}</span>
+                    </li>
+                    <li class="mb-2">
+                        <strong>Taux de confirmation:</strong>
+                        <span class="float-end">
+                            {% if total_reponses > 0 %}
+                                {% widthratio reponses_confirmees total_reponses 100 %}%
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hôpitaux en attente de validation -->
+    {% if hopitaux_en_attente %}
+    <div class="card border-0 shadow-sm p-4 mb-4 border-warning border-2">
+        <h5 class="fw-bold mb-4">
+            <i class="fas fa-hospital text-warning me-2"></i>Hôpitaux en Attente de Validation
+            <span class="badge bg-warning text-dark ms-2">{{ hopitaux_en_attente|length }}</span>
+        </h5>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Ville</th>
+                        <th>Adresse</th>
+                        <th>Téléphone</th>
+                        <th>Inscrit le</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for hop in hopitaux_en_attente %}
+                    <tr>
+                        <td><strong>{{ hop.nom }}</strong></td>
+                        <td><i class="fas fa-map-marker-alt text-muted me-1"></i>{{ hop.ville }}</td>
+                        <td><small class="text-muted">{{ hop.adresse }}</small></td>
+                        <td>{{ hop.telephone|default:"-" }}</td>
+                        <td><small>{{ hop.date_inscription|date:"d/m/Y" }}</small></td>
+                        <td>
+                            <a href="{% url 'valider_hopital' hop.id %}" class="btn btn-success btn-sm rounded-pill me-1">
+                                <i class="fas fa-check me-1"></i>Valider
+                            </a>
+                            <a href="{% url 'rejeter_hopital' hop.id %}" class="btn btn-danger btn-sm rounded-pill">
+                                <i class="fas fa-times me-1"></i>Rejeter
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="card border-0 shadow-sm p-4 mb-4">
+        <h5 class="fw-bold mb-2">
+            <i class="fas fa-hospital text-success me-2"></i>Validation des Hôpitaux
+        </h5>
+        <p class="text-muted mb-0"><i class="fas fa-check-circle text-success me-1"></i>Aucun hôpital en attente de validation.</p>
+    </div>
+    {% endif %}
+
+    <!-- Carte simplifiée : Demandes par ville -->
+    <div class="card border-0 shadow-sm p-4 mb-4">
+        <h5 class="fw-bold mb-4">
+            <i class="fas fa-map-marked-alt text-info me-2"></i>Carte des Demandes Urgentes par Ville
+        </h5>
+        {% if demandes_par_ville %}
+        <div class="row g-3">
+            {% for item in demandes_par_ville %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card border-0 bg-light h-100 p-3 text-center">
+                    <div class="fs-2 mb-1">
+                        <i class="fas fa-map-marker-alt text-danger"></i>
+                    </div>
+                    <h6 class="fw-bold mb-1">{{ item.hopital__ville }}</h6>
+                    <span class="badge bg-danger fs-6">{{ item.count }} appel{{ item.count|pluralize }}</span>
+                    <div class="mt-2">
+                        <div class="progress" style="height:6px;">
+                            <div class="progress-bar bg-danger" 
+                                 style="width: {% widthratio item.count demandes_actives 100 %}%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-muted"><i class="fas fa-check-circle me-1"></i>Aucune demande active en ce moment.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}
+

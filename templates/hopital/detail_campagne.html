@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow-lg border-0 mb-4">
+        <div class="card-body p-5">
+            <h2 class="fw-bold mb-2">{{ campagne.nom }}</h2>
+            <p class="text-muted mb-4">
+                <i class="fas fa-map-marker-alt me-2"></i>{{ campagne.lieu }}<br>
+                <i class="fas fa-calendar me-2"></i>{{ campagne.date_debut|date:"d/m/Y" }} - {{ campagne.date_fin|date:"d/m/Y" }}
+            </p>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5>Statistiques</h5>
+                    <ul class="list-unstyled">
+                        <li><strong>Inscrits:</strong> {{ campagne.inscriptions.count }}/{{ campagne.capacite_totale }}</li>
+                        <li><strong>Places restantes:</strong> {{ campagne.places_restantes }}</li>
+                        <li><strong>État:</strong> 
+                            {% if campagne.est_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <a href="{% url 'hopital:ajouter_creneau' campagne.id %}" class="btn btn-success btn-lg rounded-pill w-100 fw-bold mb-2">
+                        <i class="fas fa-plus me-2"></i>Ajouter un Créneau
+                    </a>
+                    <a href="{% url 'hopital:editer_campagne' campagne.id %}" class="btn btn-warning btn-lg rounded-pill w-100 fw-bold">
+                        <i class="fas fa-edit me-2"></i>Modifier
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Crénaux -->
+    {% if creneaux %}
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-light p-4">
+            <h5 class="fw-bold mb-0">Crénaux Disponibles</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Date</th>
+                            <th>Heure</th>
+                            <th>Capacité</th>
+                            <th>Inscrits</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for creneau in creneaux %}
+                        <tr>
+                            <td>{{ creneau.date|date:"d/m/Y" }}</td>
+                            <td>{{ creneau.heure_debut|time:"H:i" }} - {{ creneau.heure_fin|time:"H:i" }}</td>
+                            <td>{{ creneau.capacite }}</td>
+                            <td>{{ creneau.inscriptions.count }}</td>
+                            <td>
+                                <a href="{% url 'hopital:supprimer_creneau' creneau.id %}" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Inscriptions -->
+    {% if inscriptions %}
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-light p-4">
+            <h5 class="fw-bold mb-0">Inscriptions ({{ inscriptions.count }})</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Donneur</th>
+                            <th>Groupe Sanguin</th>
+                            <th>Créneau</th>
+                            <th>Date d'inscription</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for inscription in inscriptions %}
+                        <tr>
+                            <td><strong>{{ inscription.donneur.user.username }}</strong></td>
+                            <td><span class="badge bg-danger">{{ inscription.donneur.groupe_sanguin }}</span></td>
+                            <td>{{ inscription.creneau.heure_debut|time:"H:i" }} - {{ inscription.creneau.heure_fin|time:"H:i" }}</td>
+                            <td><small class="text-muted">{{ inscription.date_inscription|date:"d/m/Y H:i" }}</small></td>
+                            <td><span class="badge bg-info">{{ inscription.get_statut_display }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

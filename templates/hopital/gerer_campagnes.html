@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4 fw-bold">
+        <i class="fas fa-calendar-alt text-primary me-2"></i>Gérer les Campagnes de Collecte
+    </h2>
+
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="alert alert-{{ msg.tags }} alert-dismissible fade show" role="alert">
+                {{ msg }} <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="mb-4">
+        <a href="{% url 'hopital:creer_campagne' %}" class="btn btn-primary btn-lg rounded-pill px-5 fw-bold">
+            <i class="fas fa-plus me-2"></i>Créer une Campagne
+        </a>
+    </div>
+
+    {% if campagnes %}
+    <div class="row g-4">
+        {% for campagne in campagnes %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">{{ campagne.nom }}</h5>
+                    <p class="card-text text-muted small">
+                        <i class="fas fa-map-marker-alt me-1"></i>{{ campagne.lieu }}<br>
+                        <i class="fas fa-calendar me-1"></i>{{ campagne.date_debut|date:"d/m/Y" }} - {{ campagne.date_fin|date:"d/m/Y" }}
+                    </p>
+                    <div class="alert alert-info small py-2 mb-3">
+                        <strong>Places:</strong> {{ campagne.inscriptions.count }}/{{ campagne.capacite_totale }}
+                        {% if campagne.est_pleine %}
+                        <span class="badge bg-danger">COMPLÈTE</span>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 d-sm-flex">
+                        <a href="{% url 'hopital:detail_campagne' campagne.id %}" class="btn btn-info btn-sm rounded-pill flex-grow-1">
+                            <i class="fas fa-eye me-1"></i>Détails
+                        </a>
+                        <a href="{% url 'hopital:editer_campagne' campagne.id %}" class="btn btn-warning btn-sm rounded-pill flex-grow-1">
+                            <i class="fas fa-edit me-1"></i>Éditer
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">
+        <i class="fas fa-info-circle me-2"></i>Aucune campagne créée. Créez-en une pour commencer.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
