@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
 from django.http import HttpResponse
 from hopital.models import DemandeUrgente
 from accounts.models import Donneur, Hopital
@@ -112,11 +113,9 @@ def export_donneurs_csv(request):
 @user_passes_test(lambda u: u.is_staff)
 def valider_hopital(request, hopital_id):
     """Valide un hôpital en attente."""
-    from accounts.models import Hopital
     hopital = get_object_or_404(Hopital, id=hopital_id)
     hopital.est_valide = True
     hopital.save()
-    from django.contrib import messages
     messages.success(request, f"✓ Hôpital '{hopital.nom}' validé.")
     return redirect('admin_dashboard')
 
@@ -125,10 +124,8 @@ def valider_hopital(request, hopital_id):
 @user_passes_test(lambda u: u.is_staff)
 def rejeter_hopital(request, hopital_id):
     """Rejette/désactive un hôpital."""
-    from accounts.models import Hopital
     hopital = get_object_or_404(Hopital, id=hopital_id)
     hopital.est_valide = False
     hopital.save()
-    from django.contrib import messages
     messages.warning(request, f"Hôpital '{hopital.nom}' désactivé.")
     return redirect('admin_dashboard')
